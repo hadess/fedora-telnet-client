@@ -1,3 +1,8 @@
+%define telnet_version  0.17
+%define telnet_release  23
+
+%define telnet_errata_release  19
+
 #
 # define b5x for old 5.x release erratas
 # define b6x for old 6.x release erratas
@@ -29,15 +34,12 @@
 %{?b5x:%define dist_prefix  0.5x}
 %{?b6x:%define dist_prefix  0.6x}
 
-
-%define telnet_version  0.17
-
 Summary: The client program for the telnet remote login protocol.
 Name: telnet
 %{?dist_prefix:Version: %{telnet_version}%{dist_prefix}}
 %{!?dist_prefix:Version: %{telnet_version}}
-%{!?dist_prefix:Release: 21}
-%{?dist_prefix:Release: 19%{dist_prefix}}
+%{!?dist_prefix:Release: %{telnet_release}}
+%{?dist_prefix:Release: %{telnet_errata_release}%{dist_prefix}}
 Serial: 1
 Copyright: BSD
 Group: Applications/Internet
@@ -100,10 +102,12 @@ perl -pi -e '
     s,^SBINDIR=.*$,SBINDIR=%{_sbindir},;
     ' MCONFIG
 
-# XXX hack around gcc-2.96 problem
-%ifarch i386
-export RPM_OPT_FLAGS="`echo $RPM_OPT_FLAGS | sed -e s/-O2/-O0/`"
-%endif
+# remove stripping
+perl -pi -e 's|install[ ]+-s|install|g' \
+	./telnet/GNUmakefile \
+	./telnetd/Makefile \
+	./telnetlogin/Makefile \
+	./telnet-NETKIT/Makefile
 
 make
 
@@ -155,6 +159,12 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Tue Jul 23 2002 Harald Hoyer <harald@redhat.de> 0.17-23
+- removed prestripping
+
+* Tue Jul  9 2002 Harald Hoyer <harald@redhat.de>
+- removed x86 -O gcc-2.96 hack (#59514)
+
 * Fri Jun 21 2002 Tim Powers <timp@redhat.com>
 - automated rebuild
 
