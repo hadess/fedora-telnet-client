@@ -1,5 +1,5 @@
 %define telnet_version  0.17
-%define telnet_release  28
+%define telnet_release  29
 
 %define telnet_errata_release  19
 
@@ -8,7 +8,7 @@ Name: telnet
 Version: %{telnet_version}
 Release: %{telnet_release}
 Epoch: 1
-Copyright: BSD
+License: BSD
 Group: Applications/Internet
 Source0: ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/netkit-telnet-%{telnet_version}.tar.gz
 Source2: telnet-client.tar.gz
@@ -61,7 +61,7 @@ export LD_FLAGS="$OPT_FLAGS"
 export CC_FLAGS="$CC_FLAGS"
 if echo 'int main () { return 0; }' | gcc -pie -fPIE -O2 -xc - -o pietest 2>/dev/null; then
         if ./pietest; then
-%ifarch s390 s390x
+%ifarch s390 s390x ia64
 		 export CC_FLAGS="$OPT_FLAGS -fPIE"
 %else
 		 export CC_FLAGS="$OPT_FLAGS -fpie"
@@ -120,6 +120,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Tue Jun 15 2004 Elliot Lee <sopwith@redhat.com>
+- rebuilt
+
 * Fri Feb 13 2004 Elliot Lee <sopwith@redhat.com>
 - rebuilt
 
