@@ -1,5 +1,5 @@
 %define telnet_version  0.17
-%define telnet_release  23
+%define telnet_release  25
 
 %define telnet_errata_release  19
 
@@ -71,7 +71,7 @@ Summary: The server program for the telnet remote login protocol.
 Telnet is a popular protocol for logging into remote systems over the
 Internet. The telnet-server package includes a telnet daemon that
 supports remote logins into the host machine. The telnet daemon is
-enabled by default. You may disable the telnet daemon by editing
+disabled by default. You may enable the telnet daemon by editing
 /etc/xinetd.d/telnet.
 
 %endif
@@ -121,24 +121,8 @@ mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man8
 
 make INSTALLROOT=${RPM_BUILD_ROOT} install
 
-mkdir -p ${RPM_BUILD_ROOT}/etc/X11/applnk/Internet
-cat > ${RPM_BUILD_ROOT}/etc/X11/applnk/Internet/telnet.desktop <<EOF
-[Desktop Entry]
-Name=Telnet
-Type=Application
-Comment=client to connect to remote machines via a text interface
-Comment[de]=Telnet-Client für den textbasierten Remotezugang zu anderen Computern
-Comment[sv]=klient för anslutning till fjärrmaskiner via ett textgränssnitt
-Exec=telnet
-Icon=telnet.xpm
-Terminal=true
-EOF
-
 mkdir -p ${RPM_BUILD_ROOT}/etc/xinetd.d
 install -m644 %SOURCE3 ${RPM_BUILD_ROOT}/etc/xinetd.d/telnet
-
-mkdir -p $RPM_BUILD_ROOT/etc/X11/wmconfig
-install -m644 $RPM_SOURCE_DIR/telnet.wmconfig $RPM_BUILD_ROOT/etc/X11/wmconfig/telnet
 
 %clean
 rm -rf ${RPM_BUILD_ROOT}
@@ -159,6 +143,16 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Wed Jan 29 2003 Harald Hoyer <harald@redhat.de> 0.17-25
+- rebuilt 
+
+* Wed Jan 22 2003 Tim Powers <timp@redhat.com>
+- rebuilt
+
+* Mon Nov 11 2002 Harald Hoyer <harald@redhat.de> 0.17-24
+- changed description
+- removed unused .desktop files
+
 * Tue Jul 23 2002 Harald Hoyer <harald@redhat.de> 0.17-23
 - removed prestripping
 
