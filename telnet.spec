@@ -20,6 +20,7 @@ Patch11: telnet-0.17-8bit.patch
 Patch12: telnet-0.17-argv.patch
 Patch13: telnet-0.17-conf.patch
 Patch14: telnet-0.17-cleanup_race.patch
+Patch15: telnetd-0.17-pty_read.patch
 
 BuildPreReq: ncurses-devel
 Buildroot: %{_tmppath}/%{name}-root
@@ -56,6 +57,7 @@ mv telnet telnet-NETKIT
 %patch12 -p1 -b .argv
 %patch13 -p1 -b .confverb
 %patch14 -p1 -b .cleanup_race 
+%patch15 -p0 -b .pty_read
 
 %build
 export OPT_FLAGS="$RPM_OPT_FLAGS -g"
@@ -121,6 +123,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Fri Jan 21 2005 Harald Hoyer <harald@redhat.com> - 1:0.17-32
+- added patch telnetd-0.17-pty_read.patch, which fixes 145636
+
 * Thu Jan 13 2005 Jason Vas Dias <jvdias@redhat.com> - 1:0.17-31
 - bug 143929 / 145004 : fix race condition in telnetd on wtmp lock 
 - when cleanup() is entered from main process and in signal
