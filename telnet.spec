@@ -36,7 +36,7 @@ Summary: The client program for the telnet remote login protocol.
 Name: telnet
 %{?dist_prefix:Version: %{telnet_version}%{dist_prefix}}
 %{!?dist_prefix:Version: %{telnet_version}}
-%{!?dist_prefix:Release: 19.1}
+%{!?dist_prefix:Release: 20}
 %{?dist_prefix:Release: 19%{dist_prefix}}
 Serial: 1
 Copyright: BSD
@@ -51,6 +51,7 @@ Patch6: telnet-0.17-env.patch
 Patch7: telnet-0.17-issue.patch
 Patch8: telnet-0.17-sa-01-49.patch
 Patch9: telnet-0.17-env-5x.patch
+Patch10: telnet-0.17-pek.patch
 BuildPreReq: ncurses-devel
 Buildroot: %{_tmppath}/%{name}-root
 
@@ -85,10 +86,10 @@ mv telnet telnet-NETKIT
 %patch1 -p0 -b .cvs
 %patch5 -p0 -b .fix
 %patch6 -p1 -b .env
+%patch10 -p0 -b .pek
 %endif
 %patch7 -p1 -b .issue
 %patch8 -p1 -b .sa-01-49
-
 %build
 sh configure --with-c-compiler=gcc
 perl -pi -e '
@@ -154,6 +155,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Thu Sep 06 2001 Harald Hoyer <harald@redhat.de> 0.17-20
+- hopefully fixed #52817, #52224
+
 * Thu Aug 16 2001 Bill Nottingham <notting@redhat.com>
 - bump version for 7.2
 
