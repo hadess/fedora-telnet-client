@@ -1,46 +1,13 @@
 %define telnet_version  0.17
-%define telnet_release  25
+%define telnet_release  26.2
 
 %define telnet_errata_release  19
 
-#
-# define b5x for old 5.x release erratas
-# define b6x for old 6.x release erratas
-#
-# define b6x 1
-# define b5x 1
-
-%{?b5x:%define old_5x  1}
-%{!?b5x:%define old_5x  0}
-
-%{?b6x:%define old_6x  1}
-%{!?b6x:%define old_6x  0}
-
-%if %{old_5x} && %{old_6x}
-%{error: You cannot build for .5x and .6x at the same time}
-%quit
-%endif
-
-%if %{old_5x}
-%define b5x 1
-%undefine b6x
-%endif
-
-%if %{old_6x}
-%define b6x 1
-%undefine b5x
-%endif
-
-%{?b5x:%define dist_prefix  0.5x}
-%{?b6x:%define dist_prefix  0.6x}
-
 Summary: The client program for the telnet remote login protocol.
 Name: telnet
-%{?dist_prefix:Version: %{telnet_version}%{dist_prefix}}
-%{!?dist_prefix:Version: %{telnet_version}}
-%{!?dist_prefix:Release: %{telnet_release}}
-%{?dist_prefix:Release: %{telnet_errata_release}%{dist_prefix}}
-Serial: 1
+Version: %{telnet_version}
+Release: %{telnet_release}
+Epoch: 1
 Copyright: BSD
 Group: Applications/Internet
 Source0: ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/netkit-telnet-%{telnet_version}.tar.gz
@@ -54,6 +21,7 @@ Patch7: telnet-0.17-issue.patch
 Patch8: telnet-0.17-sa-01-49.patch
 Patch9: telnet-0.17-env-5x.patch
 Patch10: telnet-0.17-pek.patch
+Patch11: telnet-0.17-8bit.patch
 BuildPreReq: ncurses-devel
 Buildroot: %{_tmppath}/%{name}-root
 
@@ -61,7 +29,6 @@ Buildroot: %{_tmppath}/%{name}-root
 Telnet is a popular protocol for logging into remote systems over the
 Internet. The telnet package provides a command line telnet client.
 
-%if ! %{old_5x}
 %package server
 Requires: xinetd
 Group: System Environment/Daemons
@@ -74,24 +41,20 @@ supports remote logins into the host machine. The telnet daemon is
 disabled by default. You may enable the telnet daemon by editing
 /etc/xinetd.d/telnet.
 
-%endif
 %prep
 %setup -q -n netkit-telnet-%{telnet_version}
 
 mv telnet telnet-NETKIT
 %setup -T -D -q -a 2 -n netkit-telnet-%{telnet_version}
 
-%if %{old_5x}
-%patch5 -p0 -b .fix
-%patch9 -p1 -b .env
-%else
 %patch1 -p0 -b .cvs
 %patch5 -p0 -b .fix
 %patch6 -p1 -b .env
 %patch10 -p0 -b .pek
-%endif
 %patch7 -p1 -b .issue
 %patch8 -p1 -b .sa-01-49
+%patch11 -p1 -b .8bit
+
 %build
 sh configure --with-c-compiler=gcc
 perl -pi -e '
@@ -131,18 +94,23 @@ rm -rf ${RPM_BUILD_ROOT}
 %defattr(-,root,root)
 %{_bindir}/telnet
 %{_mandir}/man1/telnet.1*
-%{?b5x:%config(missingok) /etc/X11/wmconfig/telnet}
-%{?b6x:%config(missingok) /etc/X11/applnk/Internet/telnet.desktop}
 
-%{!?b5x:%files server}
+%files server
 %defattr(-,root,root)
-%{!?b5x:%config(noreplace) /etc/xinetd.d/telnet}
+%config(noreplace) /etc/xinetd.d/telnet
 %{_sbindir}/in.telnetd
 %{_mandir}/man5/issue.net.5*
 %{_mandir}/man8/in.telnetd.8*
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Wed Jun 04 2003 Elliot Lee <sopwith@redhat.com>
+- rebuilt
+
+* Wed May 28 2003 Harald Hoyer <harald@redhat.de> 1:0.17-26
+- cleanup of spec file
+- 8bit binary patch #91023
+
 * Wed Jan 29 2003 Harald Hoyer <harald@redhat.de> 0.17-25
 - rebuilt 
 
