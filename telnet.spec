@@ -1,24 +1,64 @@
+#
+# define b5x for old 5.x release erratas
+# define b6x for old 6.x release erratas
+#
+# define b6x 1
+# define b5x 1
+
+%{?b5x:%define old_5x  1}
+%{!?b5x:%define old_5x  0}
+
+%{?b6x:%define old_6x  1}
+%{!?b6x:%define old_6x  0}
+
+%if %{old_5x} && %{old_6x}
+%{error: You cannot build for .5x and .6x at the same time}
+%quit
+%endif
+
+%if %{old_5x}
+%define b5x 1
+%undefine b6x
+%endif
+
+%if %{old_6x}
+%define b6x 1
+%undefine b5x
+%endif
+
+%{?b5x:%define dist_prefix  0.5x}
+%{?b6x:%define dist_prefix  0.6x}
+
+
+%define telnet_version  0.17
+
 Summary: The client program for the telnet remote login protocol.
 Name: telnet
-Version: 0.17
-Release: 16
+%{?dist_prefix:Version: %{telnet_version}%{dist_prefix}}
+%{!?dist_prefix:Version: %{telnet_version}}
+%{!?dist_prefix:Release: 19.1}
+%{?dist_prefix:Release: 19%{dist_prefix}}
+Serial: 1
 Copyright: BSD
 Group: Applications/Internet
-Source0: ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/netkit-telnet-%{version}.tar.gz
+Source0: ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/netkit-telnet-%{telnet_version}.tar.gz
 Source2: telnet-client.tar.gz
 Source3: telnet-xinetd
+Source4: telnet.wmconfig
 Patch1: telnet-client-cvs.patch
 Patch5: telnetd-0.17.diff
 Patch6: telnet-0.17-env.patch
 Patch7: telnet-0.17-issue.patch
 Patch8: telnet-0.17-sa-01-49.patch
+Patch9: telnet-0.17-env-5x.patch
 BuildPreReq: ncurses-devel
 Buildroot: %{_tmppath}/%{name}-root
 
 %description
 Telnet is a popular protocol for logging into remote systems over the
-Internet.  The telnet package provides a command line telnet client.
+Internet. The telnet package provides a command line telnet client.
 
+%if ! %{old_5x}
 %package server
 Requires: xinetd
 Group: System Environment/Daemons
@@ -26,19 +66,26 @@ Summary: The server program for the telnet remote login protocol.
 
 %description server
 Telnet is a popular protocol for logging into remote systems over the
-Internet.  The telnet-server package includes a telnet daemon that
-supports remote logins into the host machine.  The telnet daemon is
-enabled by default.  You may disable the telnet daemon by editing
+Internet. The telnet-server package includes a telnet daemon that
+supports remote logins into the host machine. The telnet daemon is
+enabled by default. You may disable the telnet daemon by editing
 /etc/xinetd.d/telnet.
 
+%endif
 %prep
-%setup -q -n netkit-telnet-%{version}
+%setup -q -n netkit-telnet-%{telnet_version}
 
 mv telnet telnet-NETKIT
-%setup -T -D -q -a 2 -n netkit-telnet-%{version}
+%setup -T -D -q -a 2 -n netkit-telnet-%{telnet_version}
+
+%if %{old_5x}
+%patch5 -p0 -b .fix
+%patch9 -p1 -b .env
+%else
 %patch1 -p0 -b .cvs
 %patch5 -p0 -b .fix
 %patch6 -p1 -b .env
+%endif
 %patch7 -p1 -b .issue
 %patch8 -p1 -b .sa-01-49
 
@@ -85,26 +132,38 @@ EOF
 mkdir -p ${RPM_BUILD_ROOT}/etc/xinetd.d
 install -m644 %SOURCE3 ${RPM_BUILD_ROOT}/etc/xinetd.d/telnet
 
+mkdir -p $RPM_BUILD_ROOT/etc/X11/wmconfig
+install -m644 $RPM_SOURCE_DIR/telnet.wmconfig $RPM_BUILD_ROOT/etc/X11/wmconfig/telnet
+
 %clean
 rm -rf ${RPM_BUILD_ROOT}
 
 %files
 %defattr(-,root,root)
-#%config(missingok) /etc/X11/applnk/Internet/telnet.desktop
 %{_bindir}/telnet
 %{_mandir}/man1/telnet.1*
+%{?b5x:%config(missingok) /etc/X11/wmconfig/telnet}
+%{?b6x:%config(missingok) /etc/X11/applnk/Internet/telnet.desktop}
 
-%files server
+%{!?b5x:%files server}
 %defattr(-,root,root)
-%config(noreplace) /etc/xinetd.d/telnet
+%{!?b5x:%config(noreplace) /etc/xinetd.d/telnet}
 %{_sbindir}/in.telnetd
 %{_mandir}/man5/issue.net.5*
 %{_mandir}/man8/in.telnetd.8*
 %{_mandir}/man8/telnetd.8*
 
 %changelog
-* Tue Jul 31 2001 Harald Hoyer <harald@redhat.com>
+* Thu Aug 16 2001 Bill Nottingham <notting@redhat.com>
+- bump version for 7.2
+
+* Wed Aug 15 2001 Bill Nottingham <notting@redhat.com>
+- fix versioning
+
+* Tue Jul 31 2001 Harald Hoyer <harald@redhat.de>
 - fixed security issues (#50335)
+- patched the patches to fit the 5x version
+- one world -> one spec file for all versions ;)
 
 * Sat Jul 21 2001 Tim Powers <timp@redhat.com>
 - no applnk file, it's clutrtering the menus
