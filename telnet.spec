@@ -1,5 +1,5 @@
 %define telnet_version  0.17
-%define telnet_release  26.2
+%define telnet_release  28
 
 %define telnet_errata_release  19
 
@@ -56,10 +56,26 @@ mv telnet telnet-NETKIT
 %patch11 -p1 -b .8bit
 
 %build
+export OPT_FLAGS="$RPM_OPT_FLAGS -g"
+export LD_FLAGS="$OPT_FLAGS"
+export CC_FLAGS="$CC_FLAGS"
+if echo 'int main () { return 0; }' | gcc -pie -fPIE -O2 -xc - -o pietest 2>/dev/null; then
+        if ./pietest; then
+%ifarch s390 s390x
+		 export CC_FLAGS="$OPT_FLAGS -fPIE"
+%else
+		 export CC_FLAGS="$OPT_FLAGS -fpie"
+%endif
+		 export LD_FLAGS="$OPT_FLAGS -pie"
+	fi
+        rm -f pietest
+fi
+
 sh configure --with-c-compiler=gcc
 perl -pi -e '
     s,^CC=.*$,CC=cc,;
-    s,-O2,\$(RPM_OPT_FLAGS),;
+    s,-O2,\$(CC_FLAGS),;
+    s,LDFLAGS=.*,LDFLAGS=\$(LD_FLAGS),;
     s,^BINDIR=.*$,BINDIR=%{_bindir},;
     s,^MANDIR=.*$,MANDIR=%{_mandir},;
     s,^SBINDIR=.*$,SBINDIR=%{_sbindir},;
@@ -104,6 +120,12 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Fri Feb 13 2004 Elliot Lee <sopwith@redhat.com>
+- rebuilt
+
+* Thu Feb  5 2004 Harald Hoyer <harald@faro.stuttgart.redhat.com> - 1:0.17-27
+- added PIE compile flags
+
 * Wed Jun 04 2003 Elliot Lee <sopwith@redhat.com>
 - rebuilt
 
