@@ -1,7 +1,7 @@
 Summary: The client program for the telnet remote login protocol.
 Name: telnet
 Version: 0.17
-Release: 15
+Release: 16
 Copyright: BSD
 Group: Applications/Internet
 Source0: ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/netkit-telnet-%{version}.tar.gz
@@ -11,16 +11,13 @@ Patch1: telnet-client-cvs.patch
 Patch5: telnetd-0.17.diff
 Patch6: telnet-0.17-env.patch
 Patch7: telnet-0.17-issue.patch
+Patch8: telnet-0.17-sa-01-49.patch
 BuildPreReq: ncurses-devel
 Buildroot: %{_tmppath}/%{name}-root
 
 %description
 Telnet is a popular protocol for logging into remote systems over the
 Internet.  The telnet package provides a command line telnet client.
-
-Install the telnet package if you want to telnet to remote machines.
-
-This version has support for IPv6.
 
 %package server
 Requires: xinetd
@@ -29,13 +26,10 @@ Summary: The server program for the telnet remote login protocol.
 
 %description server
 Telnet is a popular protocol for logging into remote systems over the
-Internet.  The telnet-server package  a telnet daemon, which will
-support remote logins into the host machine.  The telnet daemon is
+Internet.  The telnet-server package includes a telnet daemon that
+supports remote logins into the host machine.  The telnet daemon is
 enabled by default.  You may disable the telnet daemon by editing
-/etc/xinet.d/telnet
-
-Install the telnet-server package if you want to support remote logins
-to your own machine.
+/etc/xinetd.d/telnet.
 
 %prep
 %setup -q -n netkit-telnet-%{version}
@@ -46,6 +40,7 @@ mv telnet telnet-NETKIT
 %patch5 -p0 -b .fix
 %patch6 -p1 -b .env
 %patch7 -p1 -b .issue
+%patch8 -p1 -b .sa-01-49
 
 %build
 sh configure --with-c-compiler=gcc
@@ -108,6 +103,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Tue Jul 31 2001 Harald Hoyer <harald@redhat.com>
+- fixed security issues (#50335)
+
 * Sat Jul 21 2001 Tim Powers <timp@redhat.com>
 - no applnk file, it's clutrtering the menus
 
