@@ -3,7 +3,7 @@
 Summary: The client program for the telnet remote login protocol.
 Name: telnet
 Version: 0.17
-Release: 7
+Release: 10
 Copyright: BSD
 Group: Applications/Internet
 Source0: ftp://ftp.uk.linux.org/pub/linux/Networking/netkit-devel/netkit-telnet-%{version}%{_snapshot}.tar.gz
@@ -76,6 +76,8 @@ cat > ${RPM_BUILD_ROOT}/etc/X11/applnk/Internet/telnet.desktop <<EOF
 Name=Telnet
 Type=Application
 Comment=client to connect to remote machines via a text interface
+Comment[de]=Telnet-Client für den textbasierten Remotezugang zu anderen Computern
+Comment[sv]=klient för anslutning till fjärrmaskiner via ett textgränssnitt
 Exec=telnet
 Icon=telnet.xpm
 Terminal=true
@@ -95,13 +97,22 @@ rm -rf ${RPM_BUILD_ROOT}
 
 %files server
 %defattr(-,root,root)
-%config /etc/xinetd.d/telnet
+%config(noreplace) /etc/xinetd.d/telnet
 %{_sbindir}/in.telnetd
 %{_mandir}/man5/issue.net.5*
 %{_mandir}/man8/in.telnetd.8*
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Mon Jan 22 2001 Helge Deller <hdeller@redhat.com>
+- added swedish & german translation to .desktop-file (#15332)
+
+* Sat Dec 30 2000 Nalin Dahyabhai <nalin@redhat.com>
+- mark the xinetd config file as config(noreplace)
+
+* Fri Dec 01 2000 Trond Eivind Glomsrød <teg@redhat.com>
+- make sure the server is turned off by default
+
 * Tue Jul 18 2000 Bill Nottingham <notting@redhat.com>
 - add description & default to xinetd file
 

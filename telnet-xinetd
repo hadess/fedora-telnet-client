@@ -9,5 +9,6 @@ service telnet
 	user		= root
 	server		= /usr/sbin/in.telnetd
 	log_on_failure	+= USERID
+	disable		= yes
 }
 
