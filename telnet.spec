@@ -1,7 +1,7 @@
 Summary: The client program for the telnet remote login protocol.
 Name: telnet
 Version: 0.17
-Release: 31
+Release: 32
 Epoch: 1
 License: BSD
 Group: Applications/Internet
