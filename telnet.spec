@@ -1,7 +1,7 @@
 Summary: The client program for the telnet remote login protocol.
 Name: telnet
 Version: 0.17
-Release: 34
+Release: 35
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -21,6 +21,7 @@ Patch12: telnet-0.17-argv.patch
 Patch13: telnet-0.17-conf.patch
 Patch14: telnet-0.17-cleanup_race.patch
 Patch15: telnetd-0.17-pty_read.patch
+Patch16: telnet-0.17-CAN-2005-468_469.patch
 
 BuildPreReq: ncurses-devel
 Buildroot: %{_tmppath}/%{name}-root
@@ -58,6 +59,7 @@ mv telnet telnet-NETKIT
 %patch13 -p1 -b .confverb
 %patch14 -p1 -b .cleanup_race 
 %patch15 -p0 -b .pty_read
+%patch16 -p1 -b .CAN-2005-468_469
 
 %build
 export OPT_FLAGS="$RPM_OPT_FLAGS -g"
@@ -123,6 +125,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Thu Mar 17 2005 Harald Hoyer <harald@redhat.com> - 1:0.17-35
+- fixed CAN-2005-468 and CAN-2005-469
+
 * Wed Mar 02 2005 Harald Hoyer <harald@redhat.com> 
 - rebuilt
 
