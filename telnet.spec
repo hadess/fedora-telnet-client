@@ -1,16 +1,11 @@
-%define telnet_version  0.17
-%define telnet_release  29
-
-%define telnet_errata_release  19
-
 Summary: The client program for the telnet remote login protocol.
 Name: telnet
-Version: %{telnet_version}
-Release: %{telnet_release}
+Version: 0.17
+Release: 30
 Epoch: 1
 License: BSD
 Group: Applications/Internet
-Source0: ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/netkit-telnet-%{telnet_version}.tar.gz
+Source0: ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/netkit-telnet-%{version}.tar.gz
 Source2: telnet-client.tar.gz
 Source3: telnet-xinetd
 Source4: telnet.wmconfig
@@ -22,6 +17,8 @@ Patch8: telnet-0.17-sa-01-49.patch
 Patch9: telnet-0.17-env-5x.patch
 Patch10: telnet-0.17-pek.patch
 Patch11: telnet-0.17-8bit.patch
+Patch12: telnet-0.17-argv.patch
+Patch13: telnet-0.17-conf.patch
 BuildPreReq: ncurses-devel
 Buildroot: %{_tmppath}/%{name}-root
 
@@ -42,10 +39,10 @@ disabled by default. You may enable the telnet daemon by editing
 /etc/xinetd.d/telnet.
 
 %prep
-%setup -q -n netkit-telnet-%{telnet_version}
+%setup -q -n netkit-telnet-%{version}
 
 mv telnet telnet-NETKIT
-%setup -T -D -q -a 2 -n netkit-telnet-%{telnet_version}
+%setup -T -D -q -a 2 -n netkit-telnet-%{version}
 
 %patch1 -p0 -b .cvs
 %patch5 -p0 -b .fix
@@ -54,6 +51,8 @@ mv telnet telnet-NETKIT
 %patch7 -p1 -b .issue
 %patch8 -p1 -b .sa-01-49
 %patch11 -p1 -b .8bit
+%patch12 -p1 -b .argv
+%patch13 -p1 -b .confverb
 
 %build
 export OPT_FLAGS="$RPM_OPT_FLAGS -g"
@@ -71,9 +70,8 @@ if echo 'int main () { return 0; }' | gcc -pie -fPIE -O2 -xc - -o pietest 2>/dev
         rm -f pietest
 fi
 
-sh configure --with-c-compiler=gcc
+sh configure --with-c-compiler=gcc 
 perl -pi -e '
-    s,^CC=.*$,CC=cc,;
     s,-O2,\$(CC_FLAGS),;
     s,LDFLAGS=.*,LDFLAGS=\$(LD_FLAGS),;
     s,^BINDIR=.*$,BINDIR=%{_bindir},;
@@ -120,13 +118,17 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Mon Jun 28 2004 Harald Hoyer <harald@redhat.com> - 1:0.17-30
+- fixed 126858: Too long /proc/X/cmdline: bad ps output when 
+                piped to less/more
+
 * Tue Jun 15 2004 Elliot Lee <sopwith@redhat.com>
 - rebuilt
 
 * Fri Feb 13 2004 Elliot Lee <sopwith@redhat.com>
 - rebuilt
 
-* Thu Feb  5 2004 Harald Hoyer <harald@faro.stuttgart.redhat.com> - 1:0.17-27
+* Thu Feb  5 2004 Harald Hoyer <harald@redhat.com> - 1:0.17-27
 - added PIE compile flags
 
 * Wed Jun 04 2003 Elliot Lee <sopwith@redhat.com>
