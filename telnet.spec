@@ -36,7 +36,7 @@ Summary: The client program for the telnet remote login protocol.
 Name: telnet
 %{?dist_prefix:Version: %{telnet_version}%{dist_prefix}}
 %{!?dist_prefix:Version: %{telnet_version}}
-%{!?dist_prefix:Release: 20}
+%{!?dist_prefix:Release: 21}
 %{?dist_prefix:Release: 19%{dist_prefix}}
 Serial: 1
 Copyright: BSD
@@ -155,6 +155,15 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Fri Jun 21 2002 Tim Powers <timp@redhat.com>
+- automated rebuild
+
+* Thu Jun  6 2002 Tim Powers <timp@redhat.com>
+- bump release number and rebuild
+
+* Thu May 23 2002 Tim Powers <timp@redhat.com>
+- automated rebuild
+
 * Thu Sep 06 2001 Harald Hoyer <harald@redhat.de> 0.17-20
 - hopefully fixed #52817, #52224
 
