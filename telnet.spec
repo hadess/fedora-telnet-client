@@ -1,16 +1,17 @@
-%define	_snapshot	-pre20000412
-
 Summary: The client program for the telnet remote login protocol.
 Name: telnet
 Version: 0.17
-Release: 10
+Release: 15
 Copyright: BSD
 Group: Applications/Internet
-Source0: ftp://ftp.uk.linux.org/pub/linux/Networking/netkit-devel/netkit-telnet-%{version}%{_snapshot}.tar.gz
+Source0: ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/netkit-telnet-%{version}.tar.gz
 Source2: telnet-client.tar.gz
 Source3: telnet-xinetd
-Patch4: telnet-0.10-escapechar.patch
+Patch1: telnet-client-cvs.patch
+Patch5: telnetd-0.17.diff
 Patch6: telnet-0.17-env.patch
+Patch7: telnet-0.17-issue.patch
+BuildPreReq: ncurses-devel
 Buildroot: %{_tmppath}/%{name}-root
 
 %description
@@ -18,6 +19,8 @@ Telnet is a popular protocol for logging into remote systems over the
 Internet.  The telnet package provides a command line telnet client.
 
 Install the telnet package if you want to telnet to remote machines.
+
+This version has support for IPv6.
 
 %package server
 Requires: xinetd
@@ -35,16 +38,17 @@ Install the telnet-server package if you want to support remote logins
 to your own machine.
 
 %prep
-%setup -q -n netkit-telnet-%{version}%{_snapshot}
+%setup -q -n netkit-telnet-%{version}
 
 mv telnet telnet-NETKIT
-%setup -T -D -q -a 2 -n netkit-telnet-%{version}%{_snapshot}
-%patch4 -p1 -b .escapechar
-
+%setup -T -D -q -a 2 -n netkit-telnet-%{version}
+%patch1 -p0 -b .cvs
+%patch5 -p0 -b .fix
 %patch6 -p1 -b .env
+%patch7 -p1 -b .issue
 
 %build
-sh configure
+sh configure --with-c-compiler=gcc
 perl -pi -e '
     s,^CC=.*$,CC=cc,;
     s,-O2,\$(RPM_OPT_FLAGS),;
@@ -91,7 +95,7 @@ rm -rf ${RPM_BUILD_ROOT}
 
 %files
 %defattr(-,root,root)
-%config(missingok) /etc/X11/applnk/Internet/telnet.desktop
+#%config(missingok) /etc/X11/applnk/Internet/telnet.desktop
 %{_bindir}/telnet
 %{_mandir}/man1/telnet.1*
 
@@ -104,6 +108,26 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Sat Jul 21 2001 Tim Powers <timp@redhat.com>
+- no applnk file, it's clutrtering the menus
+
+* Wed Jul 17 2001 Bill Nottingham <notting@redhat.com>
+- apply the patch, duh (and fix it while we're here)
+
+* Tue Jul 10 2001 Bill Nottingham <notting@redhat.com>
+- make /etc/issue.net parsing match the various gettys
+
+* Mon Jun 18 2001 Harald Hoyer <harald@redhat.de>
+- merged Jakubs and Pekka's patches 
+
+* Wed Apr  4 2001 Jakub Jelinek <jakub@redhat.com>
+- don't let configure to guess compiler, it can pick up egcs
+
+* Fri Mar  9 2001 Pekka Savola <pekkas@netcore.fi>
+- update to 0.17
+- apply latest changes from CVS to telnet client, enable IPv6
+- BuildPreReq ncurses-devel
+
 * Mon Jan 22 2001 Helge Deller <hdeller@redhat.com>
 - added swedish & german translation to .desktop-file (#15332)
 
