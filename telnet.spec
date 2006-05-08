@@ -1,7 +1,7 @@
 Summary: The client program for the telnet remote login protocol.
 Name: telnet
 Version: 0.17
-Release: 35.2.1
+Release: 36
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -22,6 +22,7 @@ Patch13: telnet-0.17-conf.patch
 Patch14: telnet-0.17-cleanup_race.patch
 Patch15: telnetd-0.17-pty_read.patch
 Patch16: telnet-0.17-CAN-2005-468_469.patch
+Patch17: telnet-gethostbyname.patch
 
 BuildPreReq: ncurses-devel
 Buildroot: %{_tmppath}/%{name}-root
@@ -60,6 +61,7 @@ mv telnet telnet-NETKIT
 %patch14 -p1 -b .cleanup_race 
 %patch15 -p0 -b .pty_read
 %patch16 -p1 -b .CAN-2005-468_469
+%patch17 -p1 -b .gethost
 
 %build
 export OPT_FLAGS="$RPM_OPT_FLAGS -g"
@@ -125,6 +127,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Mon May 08 2006 Harald Hoyer <harald@redhat.com> - 1:0.17-36
+- patch to remove gethostbyname() (bug #190296)
+
 * Fri Feb 10 2006 Jesse Keating <jkeating@redhat.com> - 1:0.17-35.2.1
 - bump again for double-long bug on ppc(64)
 
