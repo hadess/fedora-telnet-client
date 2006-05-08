@@ -62,7 +62,7 @@ mv telnet telnet-NETKIT
 %patch14 -p1 -b .cleanup_race 
 %patch15 -p0 -b .pty_read
 %patch16 -p1 -b .CAN-2005-468_469
-%patch17 -p1 -b .linemode
+#%patch17 -p1 -b .linemode
 %patch18 -p1 -b .gethost
 
 %build
