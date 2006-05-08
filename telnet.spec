@@ -22,7 +22,8 @@ Patch13: telnet-0.17-conf.patch
 Patch14: telnet-0.17-cleanup_race.patch
 Patch15: telnetd-0.17-pty_read.patch
 Patch16: telnet-0.17-CAN-2005-468_469.patch
-Patch17: telnet-gethostbyname.patch
+Patch17: telnet-0.17-linemode.patch
+Patch18: telnet-gethostbyname.patch
 
 BuildPreReq: ncurses-devel
 Buildroot: %{_tmppath}/%{name}-root
@@ -61,7 +62,8 @@ mv telnet telnet-NETKIT
 %patch14 -p1 -b .cleanup_race 
 %patch15 -p0 -b .pty_read
 %patch16 -p1 -b .CAN-2005-468_469
-%patch17 -p1 -b .gethost
+%patch17 -p1 -b .linemode
+%patch18 -p1 -b .gethost
 
 %build
 export OPT_FLAGS="$RPM_OPT_FLAGS -g"
