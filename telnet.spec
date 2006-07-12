@@ -1,7 +1,7 @@
 Summary: The client program for the telnet remote login protocol.
 Name: telnet
 Version: 0.17
-Release: 36
+Release: 36.1
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -129,6 +129,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Wed Jul 12 2006 Jesse Keating <jkeating@redhat.com> - 1:0.17-36.1
+- rebuild
+
 * Mon May 08 2006 Harald Hoyer <harald@redhat.com> - 1:0.17-36
 - patch to remove gethostbyname() (bug #190296)
 
