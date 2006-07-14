@@ -1,7 +1,7 @@
 Summary: The client program for the telnet remote login protocol.
 Name: telnet
 Version: 0.17
-Release: 36.1
+Release: 37
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -24,6 +24,7 @@ Patch15: telnetd-0.17-pty_read.patch
 Patch16: telnet-0.17-CAN-2005-468_469.patch
 Patch17: telnet-0.17-linemode.patch
 Patch18: telnet-gethostbyname.patch
+Patch19: netkit-telnet-0.17-ipv6.diff
 
 BuildPreReq: ncurses-devel
 Buildroot: %{_tmppath}/%{name}-root
@@ -64,6 +65,7 @@ mv telnet telnet-NETKIT
 %patch16 -p1 -b .CAN-2005-468_469
 #%patch17 -p1 -b .linemode
 %patch18 -p1 -b .gethost
+%patch19 -p1 -b .gethost
 
 %build
 export OPT_FLAGS="$RPM_OPT_FLAGS -g"
@@ -129,6 +131,10 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Fri Jul 14 2006 Harald Hoyer <harald@redhat.com> - 1:0.17-37
+- added netkit-telnet-0.17-ipv6.diff from Marek GrÃ¡c, 
+  which adds IPv6 support to telnetd
+
 * Wed Jul 12 2006 Jesse Keating <jkeating@redhat.com> - 1:0.17-36.1
 - rebuild
 
@@ -243,7 +249,7 @@ rm -rf ${RPM_BUILD_ROOT}
 * Sat Dec 30 2000 Nalin Dahyabhai <nalin@redhat.com>
 - mark the xinetd config file as config(noreplace)
 
-* Fri Dec 01 2000 Trond Eivind Glomsrød <teg@redhat.com>
+* Fri Dec 01 2000 Trond Eivind GlomsrÃ¸d <teg@redhat.com>
 - make sure the server is turned off by default
 
 * Tue Jul 18 2000 Bill Nottingham <notting@redhat.com>
@@ -256,10 +262,10 @@ rm -rf ${RPM_BUILD_ROOT}
 - FHS packaging.
 - update to 0.17-pre20000412.
 
-* Tue May 23 2000 Trond Eivind Glomsrød <teg@redhat.com>
+* Tue May 23 2000 Trond Eivind GlomsrÃ¸d <teg@redhat.com>
 - moved the xinet entry to the server
 
-* Mon May 22 2000 Trond Eivind Glomsrød <teg@redhat.com>
+* Mon May 22 2000 Trond Eivind GlomsrÃ¸d <teg@redhat.com>
 - add an entry to /etc/xinetd.d
 
 * Tue May 16 2000 Jeff Johnson <jbj@redhat.com>
