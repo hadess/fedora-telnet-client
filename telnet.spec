@@ -1,7 +1,7 @@
 Summary: The client program for the telnet remote login protocol.
 Name: telnet
 Version: 0.17
-Release: 37
+Release: 38%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -25,6 +25,7 @@ Patch16: telnet-0.17-CAN-2005-468_469.patch
 Patch17: telnet-0.17-linemode.patch
 Patch18: telnet-gethostbyname.patch
 Patch19: netkit-telnet-0.17-ipv6.diff
+Patch20: netkit-telnet-0.17-nodns.patch
 
 BuildPreReq: ncurses-devel
 Buildroot: %{_tmppath}/%{name}-root
@@ -66,6 +67,7 @@ mv telnet telnet-NETKIT
 #%patch17 -p1 -b .linemode
 %patch18 -p1 -b .gethost
 %patch19 -p1 -b .gethost
+%patch20 -p1 -b .nodns
 
 %build
 export OPT_FLAGS="$RPM_OPT_FLAGS -g"
@@ -99,7 +101,7 @@ perl -pi -e 's|install[ ]+-s|install|g' \
 	./telnetlogin/Makefile \
 	./telnet-NETKIT/Makefile
 
-make
+make %{?_smp_mflags}
 
 %install
 rm -rf ${RPM_BUILD_ROOT}
@@ -131,6 +133,11 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Fri Apr 13 2007 Adam Tkac <atkac redhat com> - 1:0.17-38.fc7
+- added -c option which disables reverse dns checking (#223448)
+- added smp_mflags to make
+- start using dist macro
+
 * Fri Jul 14 2006 Harald Hoyer <harald@redhat.com> - 1:0.17-37
 - added netkit-telnet-0.17-ipv6.diff from Marek Grác, 
   which adds IPv6 support to telnetd
