@@ -1,0 +1,14 @@
+--- netkit-telnet-0.17/telnet/sys_bsd.c.errnosysbsd	2007-08-01 11:37:27.000000000 +0200
++++ netkit-telnet-0.17/telnet/sys_bsd.c	2007-08-01 11:39:23.000000000 +0200
+@@ -407,6 +407,11 @@
+ 	    tcsetattr(tin, TCSADRAIN, &tmp_tc);
+ #endif	/* USE_TERMIO */
+ 	    old = ttyflush(SYNCHing|flushout);
++            if (old < 0) {
++              if (! ((errno == EINTR) || (errno == EAGAIN) || (errno == ENOSPC))) {
++                break;
++              }
++            }
+ 	} while (old < 0 || old > 1);
+     }
+ 
