@@ -1,7 +1,7 @@
 Summary: The client program for the telnet remote login protocol.
 Name: telnet
 Version: 0.17
-Release: 38%{?dist}
+Release: 39%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -26,6 +26,7 @@ Patch17: telnet-0.17-linemode.patch
 Patch18: telnet-gethostbyname.patch
 Patch19: netkit-telnet-0.17-ipv6.diff
 Patch20: netkit-telnet-0.17-nodns.patch
+Patch21: telnet-0.17-errno_test_sys_bsd.patch
 
 BuildPreReq: ncurses-devel
 Buildroot: %{_tmppath}/%{name}-root
@@ -66,8 +67,9 @@ mv telnet telnet-NETKIT
 %patch16 -p1 -b .CAN-2005-468_469
 #%patch17 -p1 -b .linemode
 %patch18 -p1 -b .gethost
-%patch19 -p1 -b .gethost
+%patch19 -p1 -b .gethost2
 %patch20 -p1 -b .nodns
+%patch21 -p1 -b .errnosysbsd
 
 %build
 export OPT_FLAGS="$RPM_OPT_FLAGS -g"
@@ -133,6 +135,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Wed Aug 22 2007 Harald Hoyer <harald@redhat.com> - 1:0.17-39
+- added patch to prevent a rare loop in the client
+
 * Fri Apr 13 2007 Adam Tkac <atkac redhat com> - 1:0.17-38.fc7
 - added -c option which disables reverse dns checking (#223448)
 - added smp_mflags to make
