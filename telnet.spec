@@ -1,7 +1,7 @@
 Summary: The client program for the telnet remote login protocol.
 Name: telnet
 Version: 0.17
-Release: 39%{?dist}
+Release: 40%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -135,6 +135,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Thu Sep 20 2007 Adam Tkac <atkac redhat com> 1:0.17-40
+- improved patch to #274991
+
 * Wed Aug 22 2007 Harald Hoyer <harald@redhat.com> - 1:0.17-39
 - added patch to prevent a rare loop in the client
 

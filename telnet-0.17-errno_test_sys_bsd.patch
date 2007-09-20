@@ -1,11 +1,21 @@
---- netkit-telnet-0.17/telnet/sys_bsd.c.errnosysbsd	2007-08-01 11:37:27.000000000 +0200
-+++ netkit-telnet-0.17/telnet/sys_bsd.c	2007-08-01 11:39:23.000000000 +0200
-@@ -407,6 +407,11 @@
+diff -up netkit-telnet-0.17/telnet/sys_bsd.c.errnosysbsd netkit-telnet-0.17/telnet/sys_bsd.c
+--- netkit-telnet-0.17/telnet/sys_bsd.c.errnosysbsd	2007-09-20 10:57:58.000000000 +0200
++++ netkit-telnet-0.17/telnet/sys_bsd.c	2007-09-20 11:10:08.000000000 +0200
+@@ -375,6 +375,7 @@ TerminalNewMode(int f)
+     int onoff;
+     int old;
+     cc_t esc;
++    int err;
+ 
+     globalmode = f&~MODE_FORCE;
+     if (prevmode == f)
+@@ -407,6 +408,12 @@ TerminalNewMode(int f)
  	    tcsetattr(tin, TCSADRAIN, &tmp_tc);
  #endif	/* USE_TERMIO */
  	    old = ttyflush(SYNCHing|flushout);
 +            if (old < 0) {
-+              if (! ((errno == EINTR) || (errno == EAGAIN) || (errno == ENOSPC))) {
++	      err = errno;
++              if (! ((err == EINTR) || (err == EAGAIN) || (err == ENOSPC))) {
 +                break;
 +              }
 +            }
