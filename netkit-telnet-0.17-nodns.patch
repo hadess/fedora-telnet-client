@@ -1,63 +1,43 @@
---- netkit-telnet-0.17/telnetd/telnetd.8.nodns	2000-07-31 01:57:10.000000000 +0200
-+++ netkit-telnet-0.17/telnetd/telnetd.8	2007-04-13 10:58:27.000000000 +0200
-@@ -123,6 +123,8 @@
- .Xr login 1
- program.
- .El
-+.It Fl c
-+This option disables reverse dns checking. Of course that security is lower with this option
- .It Fl D Ar debugmode
- This option may be used for debugging purposes.  This allows
- .Nm telnetd
---- netkit-telnet-0.17/telnetd/telnetd.c.nodns	2007-04-13 10:49:57.000000000 +0200
-+++ netkit-telnet-0.17/telnetd/telnetd.c	2007-04-13 10:49:57.000000000 +0200
-@@ -83,6 +83,7 @@
- 
- int debug = 0;
- int keepalive = 1;
-+int nodns = 0;
- char *loginprg = _PATH_LOGIN;
- char *progname;
- 
-@@ -111,7 +112,7 @@
- 
- 	progname = *argv;
- 
--	while ((ch = getopt(argc, argv, "d:a:e:lhnr:I:D:B:sS:a:X:L:")) != EOF) {
-+	while ((ch = getopt(argc, argv, "cd:a:e:lhnr:I:D:B:sS:a:X:L:")) != EOF) {
- 		switch(ch) {
- 
- #ifdef	AUTHENTICATE
-@@ -147,7 +148,9 @@
- 			bftpd++;
- 			break;
- #endif /* BFTPDAEMON */
--
-+		case 'c':
-+			nodns++;
-+			break;
- 		case 'd':
- 			if (strcmp(optarg, "ebug") == 0) {
- 				debug++;
-@@ -652,6 +655,9 @@
- 	char namebuf[255];
+--- netkit-telnet-0.17.orig/telnetd/telnetd.c	2007-03-13 16:31:20.000000000 +0000
++++ netkit-telnet-0.17.orig/telnetd/telnetd.c	2007-03-13 16:31:26.000000000 +0000
+@@ -653,6 +653,11 @@ doit(struct sockaddr *who, socklen_t who
  
  	error = getnameinfo(who, wholen, namebuf, sizeof(namebuf), NULL, 0, 0);
-+
-+	if ((error == EAI_AGAIN) && nodns)
-+		error = getnameinfo(who, wholen, namebuf, sizeof(namebuf), NULL, 0, NI_NUMERICHOST);
  	
++	/* if we can't get a hostname now, settle for an address */	
++	if(error == EAI_AGAIN)
++		error = getnameinfo(who, wholen, namebuf, sizeof(namebuf),
++				NULL, 0, NI_NUMERICHOST);
++		
  	if (error) {
  		perror("getnameinfo: localhost");
-@@ -688,7 +694,10 @@
- 		hints.ai_socktype = SOCK_STREAM;
- 		hints.ai_flags = AI_ADDRCONFIG;
+ 		perror(gai_strerror(error));
+@@ -681,7 +686,7 @@ doit(struct sockaddr *who, socklen_t who
+ 	/* Get local host name */
+ 	{
+ 		struct addrinfo hints;
+-		struct addrinfo *res;
++		struct addrinfo *res = 0;
+ 		int e;
  
--		gethostname(host_name, sizeof(host_name));
-+		if(nodns)
-+			sprintf(host_name, "localhost", sizeof(host_name));
-+		else
-+			gethostname(host_name, sizeof(host_name));
+ 		memset(&hints, '\0', sizeof(hints));
+@@ -690,11 +695,14 @@ doit(struct sockaddr *who, socklen_t who
+ 
+ 		gethostname(host_name, sizeof(host_name));
  		if ((e = getaddrinfo(host_name, NULL, &hints, &res)) != 0) {
- 			perror("getaddrinfo: localhost");
- 			perror(gai_strerror(e));
+-			perror("getaddrinfo: localhost");
+-			perror(gai_strerror(e));
+-			exit(1);
++			if(e != EAI_AGAIN) {
++				fprintf(stderr, "getaddrinfo: localhost %s\n", 
++				        gai_strerror(e));
++				exit(1);
++			}
+ 		}
+-		freeaddrinfo(res);
++		if(res)
++			freeaddrinfo(res);
+ 	}
+ 
+ #if	defined(AUTHENTICATE) || defined(ENCRYPT)
+
