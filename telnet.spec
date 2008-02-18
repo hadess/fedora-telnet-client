@@ -1,7 +1,7 @@
 Summary: The client program for the telnet remote login protocol.
 Name: telnet
 Version: 0.17
-Release: 41%{?dist}
+Release: 42%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -135,6 +135,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Mon Feb 18 2008 Fedora Release Engineering <rel-eng@fedoraproject.org> - 1:0.17-42
+- Autorebuild for GCC 4.3
+
 * Tue Sep 25 2007 Adam Tkac <atkac redhat com> 1:0.17-41
 - rebased "nodns" patch with patch from Bryn M. Reeves
 
