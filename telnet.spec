@@ -1,7 +1,7 @@
 Summary: The client program for the telnet remote login protocol.
 Name: telnet
 Version: 0.17
-Release: 44%{?dist}
+Release: 45%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -27,6 +27,7 @@ Patch18: telnet-gethostbyname.patch
 Patch19: netkit-telnet-0.17-ipv6.diff
 Patch20: netkit-telnet-0.17-nodns.patch
 Patch21: telnet-0.17-errno_test_sys_bsd.patch
+Patch22: netkit-telnet-0.17-reallynodns.patch
 
 BuildPreReq: ncurses-devel
 Buildroot: %{_tmppath}/%{name}-root
@@ -70,6 +71,7 @@ mv telnet telnet-NETKIT
 %patch19 -p1 -b .gethost2
 %patch20 -p1 -b .nodns
 %patch21 -p1 -b .errnosysbsd
+%patch22 -p1 -b .reallynodns
 
 %build
 export OPT_FLAGS="$RPM_OPT_FLAGS -g"
@@ -135,6 +137,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Wed Sep 02 2009 Adam Tkac <atkac redhat com> 1:0.17-45
+- add new option -N to disable DNS lookups (#490242)
+
 * Sun Jul 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:0.17-44
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
