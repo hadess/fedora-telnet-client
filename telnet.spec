@@ -1,7 +1,7 @@
-Summary: The client program for the telnet remote login protocol.
+Summary: The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 45%{?dist}
+Release: 46%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -14,7 +14,6 @@ Patch5: telnetd-0.17.diff
 Patch6: telnet-0.17-env.patch
 Patch7: telnet-0.17-issue.patch
 Patch8: telnet-0.17-sa-01-49.patch
-Patch9: telnet-0.17-env-5x.patch
 Patch10: telnet-0.17-pek.patch
 Patch11: telnet-0.17-8bit.patch
 Patch12: telnet-0.17-argv.patch
@@ -22,31 +21,29 @@ Patch13: telnet-0.17-conf.patch
 Patch14: telnet-0.17-cleanup_race.patch
 Patch15: telnetd-0.17-pty_read.patch
 Patch16: telnet-0.17-CAN-2005-468_469.patch
-Patch17: telnet-0.17-linemode.patch
 Patch18: telnet-gethostbyname.patch
 Patch19: netkit-telnet-0.17-ipv6.diff
 Patch20: netkit-telnet-0.17-nodns.patch
 Patch21: telnet-0.17-errno_test_sys_bsd.patch
 Patch22: netkit-telnet-0.17-reallynodns.patch
 
-BuildPreReq: ncurses-devel
-Buildroot: %{_tmppath}/%{name}-root
+BuildRequires: ncurses-devel
+Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %description
 Telnet is a popular protocol for logging into remote systems over the
-Internet. The telnet package provides a command line telnet client.
+Internet. The package provides a command line Telnet client
 
 %package server
 Requires: xinetd
 Group: System Environment/Daemons
-Summary: The server program for the telnet remote login protocol.
+Summary: The server program for the Telnet remote login protocol
 
 %description server
 Telnet is a popular protocol for logging into remote systems over the
-Internet. The telnet-server package includes a telnet daemon that
-supports remote logins into the host machine. The telnet daemon is
-disabled by default. You may enable the telnet daemon by editing
-/etc/xinetd.d/telnet.
+Internet. The package includes a daemon that supports Telnet remote
+logins into the host machine. The daemon is disabled by default.
+You may enable the daemon by editing /etc/xinetd.d/telnet
 
 %prep
 %setup -q -n netkit-telnet-%{version}
@@ -74,20 +71,13 @@ mv telnet telnet-NETKIT
 %patch22 -p1 -b .reallynodns
 
 %build
-export OPT_FLAGS="$RPM_OPT_FLAGS -g"
-export LD_FLAGS="$OPT_FLAGS"
-export CC_FLAGS="$CC_FLAGS"
-if echo 'int main () { return 0; }' | gcc -pie -fPIE -O2 -xc - -o pietest 2>/dev/null; then
-        if ./pietest; then
-%ifarch s390 s390x ia64
-		 export CC_FLAGS="$OPT_FLAGS -fPIE"
+%ifarch s390 s390x
+    export CC_FLAGS="$RPM_OPT_FLAGS -fPIE"
 %else
-		 export CC_FLAGS="$OPT_FLAGS -fpie"
+    export CC_FLAGS="$RPM_OPT_FLAGS -fpie"
 %endif
-		 export LD_FLAGS="$OPT_FLAGS -pie"
-	fi
-        rm -f pietest
-fi
+
+export LD_FLAGS="$LD_FLAGS -pie"
 
 sh configure --with-c-compiler=gcc 
 perl -pi -e '
@@ -100,10 +90,10 @@ perl -pi -e '
 
 # remove stripping
 perl -pi -e 's|install[ ]+-s|install|g' \
-	./telnet/GNUmakefile \
-	./telnetd/Makefile \
-	./telnetlogin/Makefile \
-	./telnet-NETKIT/Makefile
+    ./telnet/GNUmakefile \
+    ./telnetd/Makefile \
+    ./telnetlogin/Makefile \
+    ./telnet-NETKIT/Makefile
 
 make %{?_smp_mflags}
 
@@ -117,19 +107,19 @@ mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man8
 
 make INSTALLROOT=${RPM_BUILD_ROOT} install
 
-mkdir -p ${RPM_BUILD_ROOT}/etc/xinetd.d
-install -m644 %SOURCE3 ${RPM_BUILD_ROOT}/etc/xinetd.d/telnet
+mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}/xinetd.d
+install -p -m644 %SOURCE3 ${RPM_BUILD_ROOT}%{_sysconfdir}/xinetd.d/telnet
 
 %clean
 rm -rf ${RPM_BUILD_ROOT}
 
 %files
-%defattr(-,root,root)
+%defattr(-,root,root,-)
 %{_bindir}/telnet
 %{_mandir}/man1/telnet.1*
 
 %files server
-%defattr(-,root,root)
+%defattr(-,root,root,-)
 %config(noreplace) /etc/xinetd.d/telnet
 %{_sbindir}/in.telnetd
 %{_mandir}/man5/issue.net.5*
@@ -137,6 +127,12 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Fri Nov 27 2009 Adam Tkac <atkac redhat com> 1:0.17-46
+- changes related package review (#226484)
+- remove unused patches
+  - telnet-0.17-linemode.patch
+  - telnet-0.17-env-5x.patch
+
 * Wed Sep 02 2009 Adam Tkac <atkac redhat com> 1:0.17-45
 - add new option -N to disable DNS lookups (#490242)
 
@@ -342,7 +338,7 @@ rm -rf ${RPM_BUILD_ROOT}
 
 * Thu May 27 1999 Antti Andreimann <Antti.Andreimann@mail.ee>
 - fixed the problem with escape character (it could not be disabled)
-- changed the spec file to use %setup macro for unpacking telnet-client
+- changed the spec file to use %%setup macro for unpacking telnet-client
 
 * Thu Apr 15 1999 Jeff Johnson <jbj@redhat.com>
 - use glibc utmp routines.
