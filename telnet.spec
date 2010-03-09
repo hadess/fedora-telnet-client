@@ -1,11 +1,12 @@
 Summary: The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 46%{?dist}
+Release: 47%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
 Source0: ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/netkit-telnet-%{version}.tar.gz
+Url: http://web.archive.org/web/20070819111735/www.hcs.harvard.edu/~dholland/computers/old-netkit.html
 Source2: telnet-client.tar.gz
 Source3: telnet-xinetd
 Source4: telnet.wmconfig
@@ -114,6 +115,7 @@ install -p -m644 %SOURCE3 ${RPM_BUILD_ROOT}%{_sysconfdir}/xinetd.d/telnet
 rm -rf ${RPM_BUILD_ROOT}
 
 %files
+%doc README
 %defattr(-,root,root,-)
 %{_bindir}/telnet
 %{_mandir}/man1/telnet.1*
@@ -127,6 +129,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Tue Mar 09 2010 Adam Tkac <atkac redhat com> 1:0.17-47
+- add URL and README
+
 * Fri Nov 27 2009 Adam Tkac <atkac redhat com> 1:0.17-46
 - changes related package review (#226484)
 - remove unused patches
