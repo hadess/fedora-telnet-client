@@ -1,7 +1,7 @@
 Summary: The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 49%{?dist}
+Release: 50%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -27,6 +27,7 @@ Patch19: netkit-telnet-0.17-ipv6.diff
 Patch20: netkit-telnet-0.17-nodns.patch
 Patch21: telnet-0.17-errno_test_sys_bsd.patch
 Patch22: netkit-telnet-0.17-reallynodns.patch
+Patch23: telnet-rh678324.patch
 
 BuildRequires: ncurses-devel
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -70,6 +71,7 @@ mv telnet telnet-NETKIT
 %patch20 -p1 -b .nodns
 %patch21 -p1 -b .errnosysbsd
 %patch22 -p1 -b .reallynodns
+%patch23 -p1 -b .rh678324
 
 %build
 %ifarch s390 s390x
@@ -129,6 +131,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Tue Jun 28 2011 Adam Tkac <atkac redhat com> 1:0.17-50
+- telnetd: store "from" address in sockaddr_storage (#678324)
+
 * Wed Feb 09 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:0.17-49
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
