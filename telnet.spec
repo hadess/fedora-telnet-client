@@ -1,7 +1,7 @@
 Summary: The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 51%{?dist}
+Release: 52%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -135,6 +135,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:0.17-52
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
 * Wed Jul 13 2011 Adam Tkac <atkac redhat com> 1:0.17-51
 - add "-debug6" option to telnetd (#rh674942)
 - telnet wasn't interruptable (^C) when started with specious -b argument (#704604)
