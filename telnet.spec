@@ -1,7 +1,7 @@
 Summary: The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 52%{?dist}
+Release: 53%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -31,6 +31,7 @@ Patch22: netkit-telnet-0.17-reallynodns.patch
 Patch23: telnet-rh678324.patch
 Patch24: telnet-rh674942.patch
 Patch25: telnet-rh704604.patch
+Patch26: telnet-rh825946.patch
 
 BuildRequires: ncurses-devel
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -77,6 +78,7 @@ mv telnet telnet-NETKIT
 %patch23 -p1 -b .rh678324
 %patch24 -p1 -b .rh674942
 %patch25 -p1 -b .rh704604
+%patch26 -p1 -b .rh825946
 
 %build
 %ifarch s390 s390x
@@ -136,6 +138,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Thu Jun 14 2012 Adam Tkac <atkac redhat com> 1:0.17-53
+- update /var/run/utmp even on some corner cases
+
 * Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:0.17-52
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 
