@@ -1,7 +1,7 @@
 Summary: The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 55%{?dist}
+Release: 56%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -9,8 +9,9 @@ Source0: ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/netkit-telnet-%{vers
 Url: http://web.archive.org/web/20070819111735/www.hcs.harvard.edu/~dholland/computers/old-netkit.html
 # telnet-client tarball is snapshot of the OpenBSD client telnet
 Source2: telnet-client.tar.gz
-Source3: telnet-xinetd
 Source4: telnet.wmconfig
+Source5: telnet@.service
+Source6: telnet.socket
 Patch1: telnet-client-cvs.patch
 Patch5: telnetd-0.17.diff
 Patch6: telnet-0.17-env.patch
@@ -34,14 +35,16 @@ Patch25: telnet-rh704604.patch
 Patch26: telnet-rh825946.patch
 
 BuildRequires: ncurses-devel
-Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %description
 Telnet is a popular protocol for logging into remote systems over the
 Internet. The package provides a command line Telnet client
 
 %package server
-Requires: xinetd
+Requires: systemd
+Requires(post): systemd
+Requires(preun): systemd
+Requires(postun): systemd
 Group: System Environment/Daemons
 Summary: The server program for the Telnet remote login protocol
 
@@ -108,20 +111,26 @@ perl -pi -e 's|install[ ]+-s|install|g' \
 make %{?_smp_mflags}
 
 %install
-rm -rf ${RPM_BUILD_ROOT}
 mkdir -p ${RPM_BUILD_ROOT}%{_bindir}
 mkdir -p ${RPM_BUILD_ROOT}%{_sbindir}
+mkdir -p ${RPM_BUILD_ROOT}%{_unitdir}
 mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man1
 mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man5
 mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man8
 
 make INSTALLROOT=${RPM_BUILD_ROOT} install
 
-mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}/xinetd.d
-install -p -m644 %SOURCE3 ${RPM_BUILD_ROOT}%{_sysconfdir}/xinetd.d/telnet
+install -p -m644 %SOURCE5 ${RPM_BUILD_ROOT}%{_unitdir}/telnet@.service
+install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 
-%clean
-rm -rf ${RPM_BUILD_ROOT}
+%post server
+%systemd_post telnet.socket
+
+%preun server
+%systemd_preun telnet.socket
+
+%postun server
+%systemd_postun_with_restart telnet.socket
 
 %files
 %doc README
@@ -131,13 +140,16 @@ rm -rf ${RPM_BUILD_ROOT}
 
 %files server
 %defattr(-,root,root,-)
-%config(noreplace) /etc/xinetd.d/telnet
+%{_unitdir}/*
 %{_sbindir}/in.telnetd
 %{_mandir}/man5/issue.net.5*
 %{_mandir}/man8/in.telnetd.8*
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Mon May 06 2013 Michal Sekletar <msekleta@redhat.com> - 1:0.17-56
+- telnet-server will use systemd socket based activation instead of xinetd
+
 * Fri Feb 15 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:0.17-55
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
