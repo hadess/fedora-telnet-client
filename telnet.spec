@@ -151,6 +151,7 @@ install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 %changelog
 * Wed Jul 17 2013 Michal Sekletar <msekleta@redhat.com> - 1:0.17-57
 - enable hardened build
+- fix dates in changelog
 
 * Mon May 06 2013 Michal Sekletar <msekleta@redhat.com> - 1:0.17-56
 - telnet-server will use systemd socket based activation instead of xinetd
@@ -310,7 +311,7 @@ install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 * Sat Jul 21 2001 Tim Powers <timp@redhat.com>
 - no applnk file, it's clutrtering the menus
 
-* Wed Jul 17 2001 Bill Nottingham <notting@redhat.com>
+* Wed Jul 18 2001 Bill Nottingham <notting@redhat.com>
 - apply the patch, duh (and fix it while we're here)
 
 * Tue Jul 10 2001 Bill Nottingham <notting@redhat.com>
@@ -380,7 +381,7 @@ install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 * Sun Oct 10 1999 Matt Wilson <msw@redhat.com>
 - corrected the Terminal setting of the .desktop (needs to be 'true' not '1')
 
-* Sat Sep 24 1999 Preston Brown <pbrown@redhat.com>
+* Sat Sep 25 1999 Preston Brown <pbrown@redhat.com>
 - red hat .desktop entry
 
 * Sat Aug 21 1999 Jeff Johnson <jbj@redhat.com>
