@@ -36,7 +36,7 @@ Patch24: telnet-rh674942.patch
 Patch25: telnet-rh704604.patch
 Patch26: telnet-rh825946.patch
 
-BuildRequires: ncurses-devel
+BuildRequires: ncurses-devel systemd
 
 %description
 Telnet is a popular protocol for logging into remote systems over the
@@ -152,6 +152,7 @@ install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 * Wed Jul 17 2013 Michal Sekletar <msekleta@redhat.com> - 1:0.17-57
 - enable hardened build
 - fix dates in changelog
+- add systemd to BuildRequires
 
 * Mon May 06 2013 Michal Sekletar <msekleta@redhat.com> - 1:0.17-56
 - telnet-server will use systemd socket based activation instead of xinetd
