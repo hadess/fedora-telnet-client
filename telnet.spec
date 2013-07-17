@@ -1,7 +1,9 @@
+%global _hardened_build 1
+
 Summary: The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 56%{?dist}
+Release: 57%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -90,7 +92,7 @@ mv telnet telnet-NETKIT
     export CC_FLAGS="$RPM_OPT_FLAGS -fpie"
 %endif
 
-export LD_FLAGS="$LD_FLAGS -pie"
+export LD_FLAGS="$LD_FLAGS -z now -pie"
 
 sh configure --with-c-compiler=gcc 
 perl -pi -e '
@@ -147,6 +149,9 @@ install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Wed Jul 17 2013 Michal Sekletar <msekleta@redhat.com> - 1:0.17-57
+- enable hardened build
+
 * Mon May 06 2013 Michal Sekletar <msekleta@redhat.com> - 1:0.17-56
 - telnet-server will use systemd socket based activation instead of xinetd
 
