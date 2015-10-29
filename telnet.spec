@@ -3,7 +3,7 @@
 Summary: The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 62%{?dist}
+Release: 63%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -35,7 +35,7 @@ Patch23: telnet-rh678324.patch
 Patch24: telnet-rh674942.patch
 Patch25: telnet-rh704604.patch
 Patch26: telnet-rh825946.patch
-Patch27: telnet-0.17-ipv6-support.patch
+Patch27: telnet-0.17-force-ipv6-ipv4.patch
 
 BuildRequires: ncurses-devel systemd
 
@@ -151,6 +151,9 @@ install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Thu Oct 29 2015 Luboš Uhliarik <luhliari@redhat.com> - 1:0.17-63
+- Related: #1069809 - changed patch name + some minor changes in patch
+
 * Wed Sep 30 2015 Luboš Uhliarik <luhliari@redhat.com> - 1:0.17-62
 - Resolves: #1069809 - No option to specify IPv6 or IPv4 explicitly must be used
 
