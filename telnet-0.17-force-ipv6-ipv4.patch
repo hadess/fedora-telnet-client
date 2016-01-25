@@ -1,7 +1,7 @@
 diff --git a/commands.c b/commands.c
 index 49619ac..636fb5c 100644
---- a/commands.c
-+++ b/commands.c
+--- a/telnet/commands.c
++++ b/telnet/commands.c
 @@ -2267,6 +2267,7 @@ tn(int argc, char *argv[])
      char *srp = 0;
      int srlen;
@@ -43,8 +43,8 @@ index 49619ac..636fb5c 100644
  	if (portp == NULL) {
 diff --git a/main.c b/main.c
 index 5fa96e8..599f0af 100644
---- a/main.c
-+++ b/main.c
+--- a/telnet/main.c
++++ b/telnet/main.c
 @@ -80,10 +80,10 @@ usage(void)
  	fprintf(stderr, "Usage: %s %s%s%s%s\n",
  	    prompt,
@@ -108,8 +108,8 @@ index 5fa96e8..599f0af 100644
  			*argp++ = argv[1];	/* port */
 diff --git a/telnet.1 b/telnet.1
 index 50015a6..f30e034 100644
---- a/telnet.1
-+++ b/telnet.1
+--- a/telnet/telnet.1
++++ b/telnet/telnet.1
 @@ -44,7 +44,7 @@
  protocol
  .Sh SYNOPSIS
