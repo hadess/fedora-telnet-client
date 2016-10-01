@@ -38,7 +38,7 @@ Patch26: telnet-rh825946.patch
 Patch27: telnet-0.17-force-ipv6-ipv4.patch
 
 BuildRequires: ncurses-devel systemd
-BuildRequires: perl-generators
+BuildRequires: perl
 
 %description
 Telnet is a popular protocol for logging into remote systems over the
@@ -153,7 +153,7 @@ install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 
 %changelog
 * Sat Oct 01 2016 Richard W.M. Jones <rjones@redhat.com> - 1:0.17-66
-- BR perl-generators
+- BR perl
   (https://fedoraproject.org/wiki/Changes/Build_Root_Without_Perl)
 
 * Fri Feb 05 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1:0.17-65
