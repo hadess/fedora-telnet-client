@@ -3,7 +3,7 @@
 Summary: The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 65%{?dist}
+Release: 66%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -38,6 +38,7 @@ Patch26: telnet-rh825946.patch
 Patch27: telnet-0.17-force-ipv6-ipv4.patch
 
 BuildRequires: ncurses-devel systemd
+BuildRequires: perl-generators
 
 %description
 Telnet is a popular protocol for logging into remote systems over the
@@ -151,6 +152,10 @@ install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Sat Oct 01 2016 Richard W.M. Jones <rjones@redhat.com> - 1:0.17-66
+- BR perl-generators
+  (https://fedoraproject.org/wiki/Changes/Build_Root_Without_Perl)
+
 * Fri Feb 05 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1:0.17-65
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
