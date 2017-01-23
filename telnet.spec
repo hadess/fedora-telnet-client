@@ -3,7 +3,7 @@
 Summary: The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 66%{?dist}
+Release: 67%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -36,6 +36,7 @@ Patch24: telnet-rh674942.patch
 Patch25: telnet-rh704604.patch
 Patch26: telnet-rh825946.patch
 Patch27: telnet-0.17-force-ipv6-ipv4.patch
+Patch28: netkit-telnet-0.17-core-dump.patch
 
 BuildRequires: ncurses-devel systemd
 BuildRequires: perl
@@ -87,6 +88,7 @@ mv telnet telnet-NETKIT
 %patch25 -p1 -b .rh704604
 %patch26 -p1 -b .rh825946
 %patch27 -p1 -b .ipv6-support
+%patch28 -p1 -b .core-dump
 
 %build
 %ifarch s390 s390x
@@ -152,6 +154,9 @@ install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Mon Jan 23 2017 Michal Ruprich <mruprich@redhat.com> - 1:0.17-67
+- Resolves: #1415706 - telnet dumps core with certain combination of parameters
+
 * Sat Oct 01 2016 Richard W.M. Jones <rjones@redhat.com> - 1:0.17-66
 - BR perl
   (https://fedoraproject.org/wiki/Changes/Build_Root_Without_Perl)
