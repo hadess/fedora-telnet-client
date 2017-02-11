@@ -3,7 +3,7 @@
 Summary: The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 67%{?dist}
+Release: 68%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -154,6 +154,9 @@ install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1:0.17-68
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Mon Jan 23 2017 Michal Ruprich <mruprich@redhat.com> - 1:0.17-67
 - Resolves: #1415706 - telnet dumps core with certain combination of parameters
 
