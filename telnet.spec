@@ -3,7 +3,7 @@
 Summary: The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 68%{?dist}
+Release: 69%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -37,6 +37,8 @@ Patch25: telnet-rh704604.patch
 Patch26: telnet-rh825946.patch
 Patch27: telnet-0.17-force-ipv6-ipv4.patch
 Patch28: netkit-telnet-0.17-core-dump.patch
+Patch29: netkit-telnet-0.17-gcc7.patch
+Patch30: netkit-telnet-0.17-manpage.patch
 
 BuildRequires: ncurses-devel systemd
 BuildRequires: perl
@@ -89,6 +91,8 @@ mv telnet telnet-NETKIT
 %patch26 -p1 -b .rh825946
 %patch27 -p1 -b .ipv6-support
 %patch28 -p1 -b .core-dump
+%patch29 -p1 -b .gcc7
+%patch30 -p1 -b .manpage
 
 %build
 %ifarch s390 s390x
@@ -154,6 +158,10 @@ install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Tue Apr 25 2017 Michal Ruprich <mruprich@redhat.com> - 1:0.17-69
+- Resolves: #1445259 - telnet won't build with latest gcc
+- added note about address resolution in manpage
+
 * Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1:0.17-68
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
