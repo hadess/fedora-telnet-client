@@ -41,7 +41,7 @@ Patch29: netkit-telnet-0.17-gcc7.patch
 Patch30: netkit-telnet-0.17-manpage.patch
 
 BuildRequires: ncurses-devel systemd
-BuildRequires: perl
+BuildRequires: perl-interpreter
 
 %description
 Telnet is a popular protocol for logging into remote systems over the
