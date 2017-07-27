@@ -3,7 +3,7 @@
 Summary: The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 69%{?dist}
+Release: 70%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -158,6 +158,9 @@ install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1:0.17-70
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
 * Tue Apr 25 2017 Michal Ruprich <mruprich@redhat.com> - 1:0.17-69
 - Resolves: #1445259 - telnet won't build with latest gcc
 - added note about address resolution in manpage
