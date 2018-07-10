@@ -150,7 +150,6 @@ install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 %{_mandir}/man1/telnet.1*
 
 %files server
-%defattr(-,root,root,-)
 %{_unitdir}/*
 %{_sbindir}/in.telnetd
 %{_mandir}/man5/issue.net.5*
