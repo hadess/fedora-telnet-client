@@ -3,7 +3,7 @@
 Summary: The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 72%{?dist}
+Release: 73%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -157,6 +157,9 @@ install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1:0.17-73
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1:0.17-72
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
