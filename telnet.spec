@@ -3,7 +3,7 @@
 Summary: The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 73%{?dist}
+Release: 74%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -39,8 +39,9 @@ Patch27: telnet-0.17-force-ipv6-ipv4.patch
 Patch28: netkit-telnet-0.17-core-dump.patch
 Patch29: netkit-telnet-0.17-gcc7.patch
 Patch30: netkit-telnet-0.17-manpage.patch
+Patch31: netkit-telnet-0.17-telnetrc.patch
 
-BuildRequires: ncurses-devel systemd
+BuildRequires: ncurses-devel systemd gcc gcc-c++
 BuildRequires: perl-interpreter
 
 %description
@@ -93,6 +94,7 @@ mv telnet telnet-NETKIT
 %patch28 -p1 -b .core-dump
 %patch29 -p1 -b .gcc7
 %patch30 -p1 -b .manpage
+%patch31 -p1 -b .telnetrc
 
 %build
 %ifarch s390 s390x
@@ -157,6 +159,10 @@ install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Mon Jul 23 2018 Michal Ruprich <mruprich@redhat.com> - 1:0.17-74
+- Resolves: #1606506 - telnet: FTBFS in Fedora rawhide
+- Resolves: #1505954 - telnet failing to parse .telnetrc due to strncpy used on overlaping buffers
+
 * Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1:0.17-73
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
