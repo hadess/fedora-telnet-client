@@ -3,7 +3,7 @@
 Summary: The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 74%{?dist}
+Release: 75%{?dist}
 Epoch: 1
 License: BSD
 Group: Applications/Internet
@@ -40,6 +40,7 @@ Patch28: netkit-telnet-0.17-core-dump.patch
 Patch29: netkit-telnet-0.17-gcc7.patch
 Patch30: netkit-telnet-0.17-manpage.patch
 Patch31: netkit-telnet-0.17-telnetrc.patch
+Patch32: telnet-log-address.patch
 
 BuildRequires: ncurses-devel systemd gcc gcc-c++
 BuildRequires: perl-interpreter
@@ -95,6 +96,7 @@ mv telnet telnet-NETKIT
 %patch29 -p1 -b .gcc7
 %patch30 -p1 -b .manpage
 %patch31 -p1 -b .telnetrc
+%patch32 -p1 -b .log-address
 
 %build
 %ifarch s390 s390x
@@ -159,6 +161,9 @@ install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Wed Oct 10 2018 Michal Ruprich <mruprich@redhat.com> - 1:0.17-75
+- Adding -i option for disabling reverse DNS lookup
+
 * Mon Jul 23 2018 Michal Ruprich <mruprich@redhat.com> - 1:0.17-74
 - Resolves: #1606506 - telnet: FTBFS in Fedora rawhide
 - Resolves: #1505954 - telnet failing to parse .telnetrc due to strncpy used on overlaping buffers
