@@ -6,7 +6,6 @@ Version: 0.17
 Release: 75%{?dist}
 Epoch: 1
 License: BSD
-Group: Applications/Internet
 Source0: ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/netkit-telnet-%{version}.tar.gz
 Url: http://web.archive.org/web/20070819111735/www.hcs.harvard.edu/~dholland/computers/old-netkit.html
 # telnet-client tarball is snapshot of the OpenBSD client telnet
@@ -54,7 +53,6 @@ Requires: systemd
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-Group: System Environment/Daemons
 Summary: The server program for the Telnet remote login protocol
 
 %description server
