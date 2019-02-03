@@ -3,7 +3,7 @@
 Summary: The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 75%{?dist}
+Release: 76%{?dist}
 Epoch: 1
 License: BSD
 Source0: ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/netkit-telnet-%{version}.tar.gz
@@ -159,6 +159,9 @@ install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Sun Feb 03 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1:0.17-76
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
 * Wed Oct 10 2018 Michal Ruprich <mruprich@redhat.com> - 1:0.17-75
 - Adding -i option for disabling reverse DNS lookup
 
