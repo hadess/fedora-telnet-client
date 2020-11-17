@@ -107,7 +107,7 @@ mv telnet telnet-NETKIT
     export CC_FLAGS="$RPM_OPT_FLAGS -fpie"
 %endif
 
-export LD_FLAGS="$LD_FLAGS -z now -pie"
+export LD_FLAGS="$RPM_LD_FLAGS -z now -pie"
 
 sh configure --with-c-compiler=gcc 
 perl -pi -e '
