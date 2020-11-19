@@ -3,7 +3,7 @@
 Summary: The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 81%{?dist}
+Release: 82%{?dist}
 Epoch: 1
 License: BSD
 Source0: ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/netkit-telnet-%{version}.tar.gz
@@ -109,7 +109,7 @@ mv telnet telnet-NETKIT
 
 export LD_FLAGS="$RPM_LD_FLAGS -z now -pie"
 
-sh configure --with-c-compiler=gcc 
+sh configure --with-c-compiler={__cc} 
 perl -pi -e '
     s,-O2,\$(CC_FLAGS),;
     s,LDFLAGS=.*,LDFLAGS=\$(LD_FLAGS),;
@@ -125,7 +125,7 @@ perl -pi -e 's|install[ ]+-s|install|g' \
     ./telnetlogin/Makefile \
     ./telnet-NETKIT/Makefile
 
-make %{?_smp_mflags}
+%{make_build}
 
 %install
 mkdir -p ${RPM_BUILD_ROOT}%{_bindir}
@@ -163,6 +163,11 @@ install -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
 %{_mandir}/man8/telnetd.8*
 
 %changelog
+* Thu Nov 19 2020 Michal Ruprich <mruprich@redhat.com> - 1:0.17-82
+- Changing LD_FLAGS to RPM_LD_FLAGS
+- Use make_build macro and remove hard-coded gcc
+- https://docs.fedoraproject.org/en-US/packaging-guidelines/#_parallel_make
+
 * Fri Sep 25 2020 Michal Ruprich <mruprich@redhat.com> - 1:0.17-81
 - Resolves: #1882606 - in.telnetd needs to tolerate temporary EIO errors
 
