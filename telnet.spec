@@ -109,7 +109,7 @@ mv telnet telnet-NETKIT
 
 export LD_FLAGS="$RPM_LD_FLAGS -z now -pie"
 
-sh configure --with-c-compiler={__cc} 
+sh configure --with-c-compiler=%{__cc} 
 perl -pi -e '
     s,-O2,\$(CC_FLAGS),;
     s,LDFLAGS=.*,LDFLAGS=\$(LD_FLAGS),;
