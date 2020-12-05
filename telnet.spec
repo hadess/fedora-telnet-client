@@ -6,7 +6,7 @@ Version: 0.17
 Release: 82.client%{?dist}
 Epoch: 1
 License: BSD
-Source0: telnet-client.tar.gz
+Source0: https://src.fedoraproject.org/lookaside/pkgs/telnet/telnet-client.tar.gz/d74983062470c5a3e7ae14f34c489e00/telnet-client.tar.gz
 Source1: MCONFIG
 Patch1: telnet-client-cvs.patch
 Patch6: telnet-0.17-env.patch
